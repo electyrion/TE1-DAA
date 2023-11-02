@@ -11,8 +11,6 @@ public class TugasEksperimen {
 
         int[] selectedArr = reverseSortedArr;
 
-        // System.out.print("Unsorted: ");
-        // System.out.println(Arrays.toString(randomArr));
         // write the initial array to a file
         try {
             java.io.PrintWriter output = new java.io.PrintWriter("input.txt");
@@ -26,13 +24,10 @@ public class TugasEksperimen {
         System.gc();
         long beforeUsedMemory = runtime.totalMemory() - runtime.freeMemory();
         long startTime = System.nanoTime();
-        mergeSort(selectedArr, 0, selectedArr.length - 1);
-        // TwoPivotBlockPartitioning.blockPartition(selectedArr, selectedArr.length);
+        // mergeSort(selectedArr, 0, selectedArr.length - 1);
+        twoPivotBlockQuickSort(selectedArr, 0, selectedArr.length - 1);
         long endTime = System.nanoTime();
         long afterUsedMemory = runtime.totalMemory() - runtime.freeMemory();
-        
-        // System.out.print("Sorted: ");
-        // System.out.println(Arrays.toString(selectedArr));
 
         System.out.println("Time: " + (endTime - startTime) + " ns");
         System.out.println("Time: " + (endTime - startTime) / 1000000 + " ms");
@@ -49,11 +44,11 @@ public class TugasEksperimen {
             System.out.println("File not found.");
         }
 
-        System.out.println(selectedArr.length);
-        System.out.println("Goodbye World!");
+        // System.out.println(selectedArr.length);
+        // System.out.println("Goodbye World!");
     }
 
-    // write a method that will generate an array of n random integers
+    // generate an array of n random integers
     static int[] generateRandomArray(int n) {
         int[] arr = new int[n];
         for (int i = 0; i < n; i++)
@@ -61,7 +56,7 @@ public class TugasEksperimen {
         return arr;
     }
 
-    // write a method that will generate an array of n sorted integers
+    // generate an array of n sorted integers
     static int[] generateSortedArray(int n) {
         int[] arr = new int[n];
         for (int i = 0; i < n; i++)
@@ -69,7 +64,7 @@ public class TugasEksperimen {
         return arr;
     }
 
-    // write a method that will generate an array of n reverse sorted integers
+    // generate an array of n reverse sorted integers
     static int[] generateReverseSortedArray(int n) {
         int[] arr = new int[n];
         for (int i = 0; i < n; i++)
@@ -113,6 +108,55 @@ public class TugasEksperimen {
 
         while (j < n2)
             arr[k++] = rightArr[j++];
+    }
+
+    static void twoPivotBlockQuickSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int[] pivots = partition(arr, left, right);
+
+            twoPivotBlockQuickSort(arr, left, pivots[0] - 1);
+            twoPivotBlockQuickSort(arr, pivots[0] + 1, pivots[1] - 1);
+            twoPivotBlockQuickSort(arr, pivots[1] + 1, right);
+        }
+    }
+    
+    static int[] partition(int[] arr, int left, int right) {
+        if (arr[left] > arr[right])
+            swap(arr, left, right);
+
+        int p = arr[left];
+        int q = arr[right];
+
+        int i = left + 1;
+        int j = right - 1;
+        int k = left + 1;
+
+        while (k <= j) {
+            if (arr[k] < p)
+                swap(arr, k, i++);
+            else if (arr[k] >= q) {
+                while (arr[j] > q && k < j)
+                    j--;
+                swap(arr, k, j--);
+                if (arr[k] < p)
+                    swap(arr, k, i++);
+            }
+            k++;
+        }
+
+        i--;
+        j++;
+
+        swap(arr, left, i);
+        swap(arr, right, j);
+
+        return new int[] { i, j };
+    }
+
+    static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp; 
     }
 
 }
