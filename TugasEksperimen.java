@@ -5,21 +5,11 @@ public class TugasEksperimen {
     public static void main(String[] args) {
         Runtime runtime = Runtime.getRuntime();
         int[] arr = { -1, -2, -5, 70, 23, 25, 33, 8, 9, 10, 45, 11, 60, 27 };
+        int[] randomArr = generateRandomArray((int) Math.pow(2, 16));
+        int[] sortedArr = generateSortedArray((int) Math.pow(2, 16));
+        int[] reverseSortedArr = generateReverseSortedArray((int) Math.pow(2, 16));
 
-        // read array from file
-        int[] randomArr9 = readArrayFromFile("random512.txt");
-        int[] randomArr13 = readArrayFromFile("random8192.txt");
-        int[] randomArr16 = readArrayFromFile("random65536.txt");
-       
-        int[] sortedArr9 = readArrayFromFile("sorted512.txt");
-        int[] sortedArr13 = readArrayFromFile("sorted8192.txt");
-        int[] sortedArr16 = readArrayFromFile("sorted65536.txt");
-       
-        int[] reversedArr9 = readArrayFromFile("reversed512.txt");
-        int[] reversedArr13 = readArrayFromFile("reversed8192.txt");
-        int[] reversedArr16 = readArrayFromFile("reversed65536.txt");
-
-        int[] selectedArr = sortedArr16;
+        int[] selectedArr = arr;
 
         // write the initial array to a file
         try {
@@ -53,6 +43,40 @@ public class TugasEksperimen {
         } catch (java.io.IOException ex) {
             System.out.println("File not found.");
         }
+
+        // System.out.println(selectedArr.length);
+        // System.out.println("Goodbye World!");
+    }
+
+    static boolean isSorted(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++)
+            if (arr[i] > arr[i + 1])
+                return false;
+        return true;
+    }
+
+    // generate an array of n random integers
+    static int[] generateRandomArray(int n) {
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++)
+            arr[i] = (int) (Math.random() * Math.pow(2, 16));
+        return arr;
+    }
+
+    // generate an array of n sorted integers
+    static int[] generateSortedArray(int n) {
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++)
+            arr[i] = i;
+        return arr;
+    }
+
+    // generate an array of n reverse sorted integers
+    static int[] generateReverseSortedArray(int n) {
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++)
+            arr[i] = n - i;
+        return arr;
     }
 
     static void mergeSort(int[] arr, int left, int right) {
@@ -127,7 +151,6 @@ public class TugasEksperimen {
             }
 
             for (int c = 0; c < numLessThanOrEqualQ; c++) {
-                swap(A, j+c, k+block[c]);
                 int temp = A[j + c];
                 A[j + c] = A[k + block[c]];
                 A[k + block[c]] = temp;
@@ -201,48 +224,85 @@ public class TugasEksperimen {
         arr[j] = temp; 
     }
 
-    static int[] readArrayFromFile(String filename) {
-        try {
-            java.io.File file = new java.io.File(filename);
-            java.util.Scanner input = new java.util.Scanner(file);
-            String[] arrStr = input.nextLine().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
-            int[] arr = new int[arrStr.length];
-            for (int i = 0; i < arrStr.length; i++)
-                arr[i] = Integer.parseInt(arrStr[i]);
-            input.close();
-            return arr;
-        } catch (java.io.IOException ex) {
-            System.out.println("File not found.");
-            return null;
+}
+
+class TwoPivotBlockPartitioning {
+    private static final int B = 1024; // The block size.
+
+    public static int[] blockPartition(int[] A, int n) {
+        // Check if the array has more than one element.
+        if (n <= 1) {
+            return A;
         }
+
+        // Choose the two pivots.
+        int p = A[0];
+        int q = A[n - 1];
+
+        // Create an array to store the block indices.
+        int[] block = new int[B];
+
+        // Initialize the block indices and the counters for elements less than p and less than or equal to q.
+        int i = 2;
+        int j = 2;
+        int k = 2;
+        int numLessThanP = 0;
+        int numLessThanOrEqualToQ = 0;
+
+        // Iterate over the array, partitioning it into three blocks: elements less than p, elements less than or equal to q, and elements greater than q.;    
+        while (k < n) {
+            // Determine the size of the current block.
+            int t = Math.min(B, n - k);
+
+            // Iterate over the current block, counting the number of elements less than q and storing the indices of the elements in the block array.
+            for (int c = 0; c < t; c++) {
+                if (A[k + c] < q) {
+                    block[numLessThanOrEqualToQ] = c;
+                    numLessThanOrEqualToQ++;
+                }
+            }
+
+            // Swap the elements less than q with the elements at the beginning of the block.
+            for (int c = 0; c < numLessThanOrEqualToQ; c++) {
+                swap(A, j + c, k + block[c]);
+            }
+
+            // Increment the block index.
+            k += t;
+
+            // Iterate over the current block, counting the number of elements less than p and storing the indices of the elements in the block array.
+            for (int c = 0; c < numLessThanOrEqualToQ; c++) {
+                if (A[j + c] < p) {
+                    block[numLessThanP] = c;
+                    numLessThanP++;
+                }
+            }
+
+            // Swap the elements less than p with the elements at the beginning of the block.
+            for (int c = 0; c < numLessThanP; c++) {
+                swap(A, i, j + block[c]);
+            }
+
+            // Increment the block indices.
+            i += numLessThanP;
+            j += numLessThanOrEqualToQ;
+
+            // Reset the counters for elements less than p and less than or equal to q.
+            numLessThanP = 0;
+            numLessThanOrEqualToQ = 0;
+        }
+
+        // Swap the pivots back to their original positions.
+        swap(A, i - 1, 1);
+        swap(A, j, n - 1);
+
+        // Return the indices of the two pivots.
+        return new int[]{i - 1, j};
     }
 
-    static boolean isSorted(int[] arr) {
-        for (int i = 0; i < arr.length - 1; i++)
-            if (arr[i] > arr[i + 1])
-                return false;
-        return true;
+    private static void swap(int[] A, int i, int j) {
+        int temp = A[i];
+        A[i] = A[j];
+        A[j] = temp;
     }
-
-    static int[] generateRandomArray(int n) {
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++)
-            arr[i] = (int) (Math.random() * Math.pow(2, 16));
-        return arr;
-    }
-
-    static int[] generateSortedArray(int n) {
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++)
-            arr[i] = i;
-        return arr;
-    }
-
-    static int[] generateReverseSortedArray(int n) {
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++)
-            arr[i] = n - i;
-        return arr;
-    }
-
 }
