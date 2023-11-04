@@ -1,0 +1,30 @@
+Algorithm Two-Pivot Block Partitioning
+procedure BlockLomuto2(A[1...n])
+Require: n > 1, Pivots in A[1] ≤ A[n]
+
+p = A[1]; q = A[n];
+integer block[0, ..., B-1]
+i, j, k = 2
+numLessThanP, numLessThanOrEqualQ = 0
+while k < n do
+	t = min(B, n-k)
+	for c = 0; c < t; c+=1 do
+		block[numLessThanOrEqualQ] = c;
+		numLessThanOrEqualQ += (q ≥ A[k + c]);
+		
+	for c = 0; c < numLessThanOrEqualQ; c += 1 do
+		Swap A[j + c] and A[k + block[c]]
+	k += t;
+	
+	for c = 0; c < numLessThanOrEqualQ; c += 1 do
+		block[numLessThanP] = c;
+		numLessThanP += (p > A[j + c]);
+		
+	for c = 0; c < numLessThanP; c += 1; do
+		Swap A[i] and A[j + block[c]]
+		i += 1
+	j += numLessThanOrEqualQ;
+	numLessThanP, numLessThanOrEqualQ = 0;
+Swap A[i - 1] and A[1];
+Swap A[j] and A[n];
+return (i - 1, j);
