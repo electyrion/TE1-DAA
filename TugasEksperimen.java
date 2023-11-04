@@ -127,6 +127,7 @@ public class TugasEksperimen {
             }
 
             for (int c = 0; c < numLessThanOrEqualQ; c++) {
+                // swap(A, j+c, k+block[c]);
                 int temp = A[j + c];
                 A[j + c] = A[k + block[c]];
                 A[k + block[c]] = temp;
@@ -139,6 +140,7 @@ public class TugasEksperimen {
             }
 
             for (int c = 0; c < numLessThanP; c++) {
+                // swap(A, i, j+block[c]);
                 int temp = A[i];
                 A[i] = A[j + block[c]];
                 A[j + block[c]] = temp;
@@ -149,10 +151,12 @@ public class TugasEksperimen {
             numLessThanOrEqualQ = 0;
         }
 
+        // swap(A, i-1, left);
         int temp = A[i - 1];
         A[i - 1] = A[left];
         A[left] = temp;
 
+        // swap(A, j, right);
         temp = A[j];
         A[j] = A[right];
         A[right] = temp;
