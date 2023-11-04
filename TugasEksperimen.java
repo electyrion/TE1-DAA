@@ -48,6 +48,13 @@ public class TugasEksperimen {
         // System.out.println("Goodbye World!");
     }
 
+    static boolean isSorted(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++)
+            if (arr[i] > arr[i + 1])
+                return false;
+        return true;
+    }
+
     // generate an array of n random integers
     static int[] generateRandomArray(int n) {
         int[] arr = new int[n];
