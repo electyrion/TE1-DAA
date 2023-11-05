@@ -3,148 +3,161 @@ import java.util.Arrays;
 public class SortingAlgorithm {
 
     public static void main(String[] args) {
-        int[] arr = new int[] { 30, 50, 40, 29, 32, 13, 31, 45, 12, 1, 47, 2 };
+        int[] arr = { -1, -2, -5, 70, 23, 25, 33, 8, 9, 10, 45, 11, 60, 27 };
 
-        // test output
-        System.out.println("Goodbye World!");
+        // bubbleSort(arr);
+        // selectionSort(arr);
+        // insertionSort(arr);
+        // shellSort(arr);
+        mergeSort(arr, 0, arr.length - 1);
+        // quickSort(arr, 0, arr.length - 1);
         System.out.println(Arrays.toString(arr));
 
-        // test bubble
-        // System.out.println(Arrays.toString(BubbleSort(arr)));
-
-        // test selection
-        // System.out.println(Arrays.toString(SelectionSort(arr)));
-
-        // test insertion
-        // System.out.println(Arrays.toString(InsertionSort(arr)));
-
-        // test merge
-
-        // test quick
-        System.out.println(Arrays.toString(QuickSort(arr)));
+        // caller();
     }
 
-    public static int[] BubbleSort(int[] arr) {
-        boolean swapped;
-        int temp;
-        do {
-            swapped = false;
-            for (int i = 0; i < arr.length - 1; i++) {
-                if (arr[i] > arr[i + 1]) {
-                    // swap element
-                    temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
+    static int whatIsIt(int m, int n) {
+        if (m < 0 || n < 0)
+            return -1;
+        if (m == 0)
+            return n + 1;
+        else if (n == 0)
+            return 1 + whatIsIt(m - 1, 1);
+        else
+            return 1 + whatIsIt(m - 1, whatIsIt(m, n - 1));
+    }
+
+    static void caller() {
+        System.out.println(whatIsIt(2, 3));
+    }
+
+    static void bubbleSort(int[] arr) {
+        for (int i = arr.length - 1; i >= 0; i--) {
+            boolean swapped = false;
+            for (int j = 0; j < i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
                     swapped = true;
                 }
             }
-        } while (swapped);
 
-        return arr;
-    }
-
-    public static int[] SelectionSort(int[] arr) {
-        int firstUnsorted = 0;
-        int minimum;
-        int temp;
-
-        // repeat (numOfElement - 1) times
-        for (int i = 0; i < arr.length - 1; i++) {
-
-            // set the first unsorted element as the minimum
-            minimum = firstUnsorted;
-
-            // for each of the unsorted elements
-            for (int j = firstUnsorted; j < arr.length; j++) {
-                if (arr[j] < arr[minimum]) {
-                    // set element as new minimum
-                    minimum = j;
-                }
-            }
-
-            // swap minimum with first unsorted position
-            temp = arr[firstUnsorted];
-            arr[firstUnsorted] = arr[minimum];
-            arr[minimum] = temp;
-
-            firstUnsorted++;
+            if (!swapped)
+                return;
         }
-
-        return arr;
     }
 
-    public static int[] InsertionSort(int[] arr) {
+    static void selectionSort(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            int minIdx = i;
 
-        int temp;
+            for (int j = i + 1; j < arr.length; j++)
+                if (arr[j] < arr[minIdx])
+                    minIdx = j;
 
-        // mark first element as sorted
-        int sorted = 0;
+            int temp = arr[i];
+            arr[i] = arr[minIdx];
+            arr[minIdx] = temp;
+        }
+    }
 
-        // for each unsorted element
+    static void insertionSort(int[] arr) {
         for (int i = 1; i < arr.length; i++) {
-            // 'extract' the element
-            temp = arr[i];
-
-            // for j = lastSortedIndex down to 0
-            for (int j = sorted; j >= 0; j--) {
-                if (arr[j] > temp) {
-                    // move sorted element to the right by 1
-                    arr[j + 1] = arr[j];
-                    arr[j] = temp;
-                } else {
-                    break;
-                }
+            int temp = arr[i];
+            int j = i;
+            while (j > 0 && temp < arr[j - 1]) {
+                arr[j] = arr[j - 1];
+                j--;
             }
 
-            sorted++;
+            arr[j] = temp;
         }
-
-        return arr;
     }
 
-    public static int[] MergeSort(int[] arr, int aLeft, int aRight, int bLeft, int bRight) {
-
-        // split each element into partition of size 1
-        // recursively merge adjacent partitions
-        // for i = leftPartIdx to rightPartIdx
-        // if leftPartHeadValue <= rightPartHeadValue
-        // copy leftPartHeadValue
-        // else: copy rightPartHeadValue; Increase InvIdx
-        // copy elements back to original array
-
-        return arr;
-    }
-
-    public static int[] QuickSort(int[] arr) {
-
-        int sorted = 0;
-        int temp;
-        int pivotIndex;
-        int storeIndex;
-
-        // for each (unsorted partition)
-        for (int i = sorted; i < arr.length; i++) {
-            // set first element as pivot
-            pivotIndex = sorted;
-            storeIndex = pivotIndex + 1;
-            // for i = pivotIndex + 1 to rightmostIndex
-            for (int j = storeIndex; j < arr.length; j++) {
-                // if ((a[i] < a[pivot]) or (equal but 50% lucky))
-                if ((arr[j] <= arr[pivotIndex])) {
-                    // swap(i, storeIndex); ++storeIndex
-                    temp = arr[i];
-                    arr[i] = arr[storeIndex];
-                    arr[storeIndex] = temp;
+    static void shellSort(int[] arr) {
+        int n = arr.length;
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+            for (int i = gap; i < n; i += gap) {
+                int temp = arr[i];
+                int j = i;
+                while (j > 0 && temp < arr[j - gap]) {
+                    arr[j] = arr[j - gap];
+                    j -= gap;
                 }
 
+                arr[j] = temp;
             }
-            // swap(pivot, storeIndex - 1)
-            temp = arr[pivotIndex];
-            arr[pivotIndex] = arr[storeIndex - 1];
-            arr[storeIndex - 1] = temp;
         }
+    }
 
-        return arr;
+    static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+
+            merge(arr, left, mid, right);
+        }
+    }
+
+    static void merge(int[] arr, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        int leftArr[] = new int[n1];
+        int rightArr[] = new int[n2];
+
+        for (int i = 0; i < n1; i++)
+            leftArr[i] = arr[left + i];
+        for (int j = 0; j < n2; j++)
+            rightArr[j] = arr[mid + 1 + j];
+
+        int i = 0, j = 0, k = left;
+
+        while (i < n1 && j < n2)
+            if (leftArr[i] <= rightArr[j])
+                arr[k++] = leftArr[i++];
+            else
+                arr[k++] = rightArr[j++];
+
+        while (i < n1)
+            arr[k++] = leftArr[i++];
+
+        while (j < n2)
+            arr[k++] = rightArr[j++];
+    }
+
+    static void quickSort(int arr[], int left, int right) {
+        if (left < right) {
+            int pIdx = partition(arr, left, right);
+            quickSort(arr, left, pIdx - 1);
+            quickSort(arr, pIdx + 1, right);
+        }
+    }
+
+    static int partition(int arr[], int left, int right) {
+        int pivot = arr[right];
+        int i = left, j = right - 1;
+
+        while (i <= j) {
+            while (i <= right && arr[i] < pivot)
+                i++;
+
+            while (j >= left && arr[j] >= pivot)
+                j--;
+
+            if (i < j) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        int temp = arr[i];
+        arr[i] = arr[right];
+        arr[right] = temp;
+        return i;
     }
 
     public static int[] CountingSort(int[] arr) {
