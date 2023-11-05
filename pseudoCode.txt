@@ -1,3 +1,15 @@
+Algorithm Two-Pivot-Quicksort
+procedure TwoPivotQuickSort(A[1...n])
+
+if n > 1 then
+	choosePivot(A[i...n]) >>> Pivots A[1] ≤ A[n]
+	(i, j) = BlockLomuto2(A[1...n])
+	TwoPivotQuickSort(A[1...i-1])
+	TwoPivotQuickSort(A[i+1...j-1])
+	TwoPivotQuickSort(A[j+1...n])
+
+
+
 Algorithm Two-Pivot Block Partitioning
 procedure BlockLomuto2(A[1...n])
 Require: n > 1, Pivots in A[1] ≤ A[n]
