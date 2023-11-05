@@ -23,7 +23,7 @@ public class TugasEksperimen {
 
         // write the initial array to a file
         try {
-            java.io.PrintWriter output = new java.io.PrintWriter("input.txt");
+            java.io.PrintWriter output = new java.io.PrintWriter("io/input.txt");
             output.println("----------Unsorted----------");
             output.println(Arrays.toString(selectedArr));
             output.close();
@@ -46,7 +46,7 @@ public class TugasEksperimen {
 
         // write the result to a file
         try {
-            java.io.PrintWriter output = new java.io.PrintWriter("output.txt");
+            java.io.PrintWriter output = new java.io.PrintWriter("io/output.txt");
             output.println("----------Sorted----------");
             output.println(Arrays.toString(selectedArr));
             output.close();
