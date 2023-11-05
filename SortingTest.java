@@ -160,4 +160,15 @@ public class SortingTest {
         return i;
     }
 
+    public static int[] CountingSort(int[] arr) {
+
+        // create key (counting) array
+        int[] arrCount = new int[1000];
+        // for each element in list
+        for (int i : arr) {
+            arrCount[i]++;
+        }
+
+        return arr;
+    }
 }
