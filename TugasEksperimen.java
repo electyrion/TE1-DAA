@@ -7,17 +7,17 @@ public class TugasEksperimen {
         int[] arr = { -1, -2, -5, 70, 23, 25, 33, 8, 9, 10, 45, 11, 60, 27 };
 
         // read array from file
-        int[] randomArr9 = readArrayFromFile("random512.txt");
-        int[] randomArr13 = readArrayFromFile("random8192.txt");
-        int[] randomArr16 = readArrayFromFile("random65536.txt");
+        int[] randomArr9 = readArrayFromFile("dataset/random512.txt");
+        int[] randomArr13 = readArrayFromFile("dataset/random8192.txt");
+        int[] randomArr16 = readArrayFromFile("dataset/random65536.txt");
 
-        int[] sortedArr9 = readArrayFromFile("sorted512.txt");
-        int[] sortedArr13 = readArrayFromFile("sorted8192.txt");
-        int[] sortedArr16 = readArrayFromFile("sorted65536.txt");
+        int[] sortedArr9 = readArrayFromFile("dataset/sorted512.txt");
+        int[] sortedArr13 = readArrayFromFile("dataset/sorted8192.txt");
+        int[] sortedArr16 = readArrayFromFile("dataset/sorted65536.txt");
 
-        int[] reversedArr9 = readArrayFromFile("reversed512.txt");
-        int[] reversedArr13 = readArrayFromFile("reversed8192.txt");
-        int[] reversedArr16 = readArrayFromFile("reversed65536.txt");
+        int[] reversedArr9 = readArrayFromFile("dataset/reversed512.txt");
+        int[] reversedArr13 = readArrayFromFile("dataset/reversed8192.txt");
+        int[] reversedArr16 = readArrayFromFile("dataset/reversed65536.txt");
 
         int[] selectedArr = randomArr16;
 
